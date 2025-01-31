@@ -12,6 +12,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development node ./server/easyrtc-server.js",
     "dev-socketio": "cross-env NODE_ENV=development node ./server/socketio-server.js",
+    "dev-ws": "cross-env NODE_ENV=development node ./server/ws-server.js",
     "dist": "npm run dist:min && npm run dist:max",
     "dist:max": "webpack --config webpack.config.js",
     "dist:min": "webpack --config webpack.prod.config.js",
@@ -19,6 +20,7 @@
     "prepare": "husky install && npm run dist && shx cp -r dist examples",
     "start": "node ./server/easyrtc-server.js",
     "start-socketio": "node ./server/socketio-server.js",
+    "start-ws": "node ./server/ws-server.js",
     "test": "karma start ./tests/unit/karma.conf.js",
     "test:firefox": "karma start ./tests/unit/karma.conf.js --browsers Firefox",
     "test:chrome": "karma start ./tests/unit/karma.conf.js --browsers Chrome"
@@ -28,7 +30,8 @@
     "buffered-interpolation": "Infinitelee/buffered-interpolation#5bb18421ebf2bf11664645cdc7a15bd77ee2156b",
     "express": "^4.17.3",
     "open-easyrtc": "^2.1.0",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.1",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.5",
@@ -93,5 +96,8 @@
     "presets": [
       "@babel/preset-env"
     ]
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.9"
   }
 }

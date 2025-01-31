@@ -3,6 +3,7 @@ const EasyRtcAdapter = require("./EasyRtcAdapter");
 const WebrtcAdapter = require("./naf-webrtc-adapter");
 const SocketioAdapter = require('./naf-socketio-adapter');
 const UWSAdapter = require('./naf-uws-adapter');
+const WSAdapter = require("./naf-ws-adapter");
 
 class AdapterFactory {
   constructor() {
@@ -12,6 +13,7 @@ class AdapterFactory {
       "socketio": SocketioAdapter,
       "webrtc": WebrtcAdapter,
       "uws": UWSAdapter,
+      "ws": WSAdapter,
     };
 
     this.IS_CONNECTED = AdapterFactory.IS_CONNECTED;
