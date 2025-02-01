@@ -1,4 +1,4 @@
-/* global NAF, ws */
+/* global NAF */
 
 class AdapterMessageEvent extends Event {
   constructor(msgType, packet) {
@@ -216,7 +216,7 @@ class WSAdapter {
     this.packet.data = data;
     this.packet.msgType = 'send';
 
-    if (this.socket) {
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(JSON.stringify(this.packet));
     } else {
       NAF.log.warn('WebSocket not created yet');
@@ -234,7 +234,7 @@ class WSAdapter {
     this.packet.data = data;
     this.packet.msgType = 'broadcast';
 
-    if (this.socket) {
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(JSON.stringify(this.packet));
     } else {
       NAF.log.warn('WebSocket not created yet');
