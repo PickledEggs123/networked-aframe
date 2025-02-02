@@ -170,7 +170,7 @@ class WSAdapter {
     this.packet.from = this.myId;
     this.packet.to = undefined;
     this.packet.type = 'joinRoom';
-    this.packet.data = { room: this.room };
+    this.packet.data = { room: this.room, clientId: this.socket.id };
     this.packet.msgType = 'joinedRoom';
     this.sendData(this.packet.to, this.packet.type, this.packet.data);
   }

@@ -86,7 +86,8 @@ io.on("connection", (socket) => {
   });
 
   eventEmitterIn.on("joinRoom", ({ data }) => {
-    const { room } = data;
+    const { room, clientId } = data;
+    socket.id = clientId;
 
     curRoom = room;
     let roomInfo = rooms.get(room);
@@ -212,6 +213,7 @@ io.on("connection", (socket) => {
         from: "server",
         type: "occupantsChanged",
         data: { occupants },
+        msgType: 'broadcast',
       });
 
       if (roomInfo.occupantsCount === 0) {
@@ -219,6 +221,8 @@ io.on("connection", (socket) => {
         rooms.delete(curRoom);
       }
     }
+
+    socket.terminate();
   }
 
   socket.on("disconnect", disconnect);
