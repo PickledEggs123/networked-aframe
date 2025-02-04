@@ -48,7 +48,10 @@ app.use(express.static(path.resolve(__dirname, "..", "examples")));
 const webServer = http.createServer(app);
 // To enable https on the node server, comment the line above and uncomment the line below
 // const webServer = https.createServer(credentials, app);
-const io = new WebSocketServer({server: webServer});
+const io = new WebSocketServer({
+  server: webServer,
+  path: '/socket'
+});
 
 const rooms = new Map();
 

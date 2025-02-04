@@ -78,9 +78,9 @@ class WSAdapter {
     this.updateTimeOffset().then(() => {
       if (!self.wsUrl || self.wsUrl === '/') {
         if (location.protocol === 'https:') {
-          self.wsUrl = 'wss://' + location.host + "/ws";
+          self.wsUrl = 'wss://' + location.host + "/socket";
         } else {
-          self.wsUrl = 'ws://' + location.host + "/ws";
+          self.wsUrl = 'ws://' + location.host + "/socket";
         }
       }
 
