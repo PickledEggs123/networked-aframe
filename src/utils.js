@@ -131,3 +131,19 @@ module.exports.vectorRequiresUpdate = epsilon => {
     };
   };
 };
+
+module.exports.componentRequiresUpdate = () => {
+  let prev = null;
+
+  return curr => {
+    if (prev === null) {
+      prev = curr;
+      return true;
+    } else if (JSON.stringify(prev) !== JSON.stringify(curr)) {
+      prev = curr;
+      return true;
+    }
+
+    return false;
+  };
+};
