@@ -9,6 +9,7 @@ class NetworkConnection {
 
     this.connectedClients = {};
     this.activeDataChannels = {};
+    this.notConnectedMessageBuffer = {};
   }
 
   setNetworkAdapter(adapter) {
@@ -139,6 +140,7 @@ class NetworkConnection {
   dataChannelClosed(clientId) {
     NAF.log.write('Closed data channel from ' + clientId);
     this.activeDataChannels[clientId] = false;
+    delete this.notConnectedMessageBuffer[clientId];
     this.entities.removeEntitiesOfClient(clientId);
 
     var evt = new CustomEvent('clientDisconnected', {detail: {clientId: clientId}});
@@ -159,13 +161,28 @@ class NetworkConnection {
 
   sendData(toClientId, dataType, data, guaranteed) {
     if (this.hasActiveDataChannel(toClientId)) {
+      if (this.notConnectedMessageBuffer[toClientId].length) {
+        for (const msg of this.notConnectedMessageBuffer[toClientId]) {
+          if (msg.guaranteed) {
+            this.adapter.sendDataGuaranteed(toClientId, msg.dataType, msg.data);
+          } else {
+            this.adapter.sendData(toClientId, msg.dataType, msg.data);
+          }
+        }
+        this.notConnectedMessageBuffer[toClientId] = [];
+      }
       if (guaranteed) {
         this.adapter.sendDataGuaranteed(toClientId, dataType, data);
       } else {
         this.adapter.sendData(toClientId, dataType, data);
       }
     } else {
-      // console.error("NOT-CONNECTED", "not connected to " + toClient);
+      let arr = this.notConnectedMessageBuffer[toClientId];
+      if (!arr) {
+        arr = [];
+        this.notConnectedMessageBuffer[toClientId] = arr;
+      }
+      arr.push({dataType, data, guaranteed});
     }
   }
 
@@ -218,6 +235,7 @@ class NetworkConnection {
     NAF.clientId = '';
     this.connectedClients = {};
     this.activeDataChannels = {};
+    this.notConnectedMessageBuffer = {};
     this.adapter = null;
 
     this.setupDefaultDataSubscriptions();
