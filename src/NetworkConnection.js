@@ -161,7 +161,7 @@ class NetworkConnection {
 
   sendData(toClientId, dataType, data, guaranteed) {
     if (this.hasActiveDataChannel(toClientId)) {
-      if (this.notConnectedMessageBuffer[toClientId].length) {
+      if (this.notConnectedMessageBuffer[toClientId]?.length) {
         for (const msg of this.notConnectedMessageBuffer[toClientId]) {
           if (msg.guaranteed) {
             this.adapter.sendDataGuaranteed(toClientId, msg.dataType, msg.data);
